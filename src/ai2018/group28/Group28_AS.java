@@ -67,7 +67,7 @@ public class Group28_AS extends AcceptanceStrategy {
         if (negotiationSession.getTime() >= time_const){
             return Actions.Accept;
         }
-        else if (negotiationSession.getTime() <= 0.75){
+        else if (negotiationSession.getTime() <= 0.85){
             if (negotiationSession.getOpponentBidHistory() != null && negotiationSession.getOwnBidHistory().getLastBidDetails() != null){
                 double lastOpponentBidUtil = negotiationSession.getOpponentBidHistory().getLastBidDetails().getMyUndiscountedUtil();
                 double lastMyBidUtil = negotiationSession.getOwnBidHistory().getLastBidDetails().getMyUndiscountedUtil();
