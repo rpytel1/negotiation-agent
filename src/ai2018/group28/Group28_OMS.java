@@ -95,7 +95,7 @@ public class Group28_OMS extends OMStrategy {
         ///check between if it is conceeding
         for (int i = 0; i < windowBids.size() - 1; i++) {
             double firstUtil = model.getBidEvaluation(windowBids.get(i).getBid());
-            double seccondUtil = model.getBidEvaluation(windowBids.get(i).getBid());
+            double seccondUtil = model.getBidEvaluation(windowBids.get(i+1).getBid());
 
             Boolean conceeding = new Boolean(firstUtil < seccondUtil);
             isConceedingList.add(conceeding);
