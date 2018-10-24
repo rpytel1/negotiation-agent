@@ -13,6 +13,8 @@ public class Group28_OMS extends OMStrategy {
     @Override
     public BidDetails getBid(List<BidDetails> bidsInRange) {
 
+        BidDetails bestBid;
+
         if (bidsInRange.size() == 1) {
             return bidsInRange.get(0);
         }
@@ -20,11 +22,11 @@ public class Group28_OMS extends OMStrategy {
         boolean isConciding = checkConceeding();
 
         if (isConciding) {
-            selfishMove(bidsInRange);
+            bestBid = selfishMove(bidsInRange);
         } else {
-            encouragingMove(bidsInRange);
+            bestBid = encouragingMove(bidsInRange);
         }
-        return chooseRandom(bidsInRange);
+        return bestBid;
     }
 
     @Override
