@@ -61,7 +61,7 @@ public class CustomUtilitySpaceFactory extends AdditiveUtilitySpaceFactory {
                 currentPopularityMeasure.setNumOfAppearences(currentPopularityMeasure.getNumOfAppearences() + 1);
                 currPopularityForIssueMap.put(v, currentPopularityMeasure);
                 popularityMap.put(i, currPopularityForIssueMap);
-
+                setUtility(i, v, currentPopularityMeasure.calculateWeight());
             }
             points += 1;
         }
@@ -113,6 +113,11 @@ public class CustomUtilitySpaceFactory extends AdditiveUtilitySpaceFactory {
         }
 
         return inp;
+    }
+
+    @Override
+    public AdditiveUtilitySpace getUtilitySpace() {
+        return u;
     }
 
     private List<Issue> getIssues() {

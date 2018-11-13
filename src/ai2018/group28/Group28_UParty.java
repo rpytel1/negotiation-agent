@@ -1,48 +1,127 @@
 package ai2018.group28;
 
+import genius.core.AgentID;
 import genius.core.Bid;
 import genius.core.Domain;
-import genius.core.actions.Accept;
-import genius.core.actions.Action;
-import genius.core.actions.Offer;
+import genius.core.actions.*;
+import genius.core.bidding.BidDetails;
+import genius.core.boaframework.*;
 import genius.core.parties.AbstractNegotiationParty;
+import genius.core.parties.NegotiationInfo;
+import genius.core.persistent.PersistentDataType;
 import genius.core.uncertainty.AdditiveUtilitySpaceFactory;
 import genius.core.uncertainty.BidRanking;
-import genius.core.uncertainty.ExperimentalUserModel;
 import genius.core.utility.AbstractUtilitySpace;
-import genius.core.utility.UncertainAdditiveUtilitySpace;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class Group28_UParty extends AbstractNegotiationParty {
+    AcceptanceStrategy group28AS;
+    OfferingStrategy group28BS;
+    OpponentModel group28_OM;
+    OMStrategy group28_OMS;
+
+    NegotiationSession negotiationSession;
+    Bid oppBid;
+
+    public Group28_UParty(){
+
+        group28_OMS = new Group28_OMS();
+        group28AS = new Group28_AS();
+        group28BS = new Group28_BS();
+        group28_OM = new Group28_OM();
+    }
 
     @Override
-    public Action chooseAction(List<Class<? extends Action>> possibleActions) {
-        this.log("This is the UncertaintyAgentExample.");
-        this.log("The user model is: " + this.userModel);
-        this.log("The default estimated utility space is: " + this.getUtilitySpace());
-        Bid randomBid = this.getUtilitySpace().getDomain().getRandomBid(this.rand);
-        this.log("The default estimate of the utility of a random bid + " + randomBid + " is: " + this.getUtility(randomBid));
-        if (this.userModel instanceof ExperimentalUserModel) {
-            this.log("You have given the agent access to the real utility space for debugging purposes.");
-            ExperimentalUserModel experimentalUserModel = (ExperimentalUserModel) this.userModel;
-            UncertainAdditiveUtilitySpace uncertainAdditiveUtilitySpace = experimentalUserModel.getRealUtilitySpace();
-            this.log("The real utility space is: " + uncertainAdditiveUtilitySpace);
-            this.log("The real utility of the random bid is: " + uncertainAdditiveUtilitySpace.getUtility(randomBid));
-        }
+    public void init(NegotiationInfo info) {
+        super.init(info);
 
-        if (this.getLastReceivedAction() instanceof Offer) {
-            Bid lastBid = ((Offer) this.getLastReceivedAction()).getBid();
-            List bidRanking = this.userModel.getBidRanking().getBidOrder();
-            if (bidRanking.contains(lastBid)) {
-                double lastBidId = (double) (bidRanking.size() - bidRanking.indexOf(lastBid)) / (double) bidRanking.size();
-                if (lastBidId < 0.1D) {
-                    return new Accept(this.getPartyId(), lastBid);
+        SessionData sessionData = null;
+        if (info.getPersistentData()
+                .getPersistentDataType() == PersistentDataType.SERIALIZABLE) {
+            sessionData = (SessionData) info.getPersistentData().get();
+        }
+        if (sessionData == null) {
+            sessionData = new SessionData();
+        }
+        negotiationSession = new NegotiationSession(sessionData, utilitySpace,
+                timeline, null, info.getUserModel());
+        initStrategies();
+    }
+
+    private void initStrategies() {
+        try {
+            group28_OM.init(negotiationSession, new HashMap<String, Double>());
+            group28_OMS.init(negotiationSession, group28_OM, new HashMap<String, Double>());
+            group28BS.init(negotiationSession, group28_OM, group28_OMS, new HashMap<String, Double>());
+            group28AS.init(negotiationSession, group28BS, group28_OM, new HashMap<String, Double>());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void receiveMessage(AgentID sender, Action opponentAction) {
+        if (opponentAction instanceof Offer) {
+            oppBid = ((Offer) opponentAction).getBid();
+            try {
+                BidDetails opponentBid = new BidDetails(oppBid,
+                        negotiationSession.getUtilitySpace().getUtility(oppBid),
+                        negotiationSession.getTime());
+                negotiationSession.getOpponentBidHistory().add(opponentBid);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (group28_OM != null && !(group28_OM instanceof NoModel)) {
+                if (group28_OMS.canUpdateOM()) {
+                    group28_OM.updateModel(oppBid);
+                } else {
+                    if (!group28_OM.isCleared()) {
+                        group28_OM.cleanUp();
+                    }
                 }
             }
         }
+    }
 
-        return new Offer(this.getPartyId(), this.generateRandomBid());
+    @Override
+    public Action chooseAction(List<Class<? extends Action>> possibleActions) {
+        BidDetails bid;
+
+        if (negotiationSession.getOwnBidHistory().getHistory().isEmpty()) {
+            bid = group28BS.determineOpeningBid();
+        } else {
+            bid = group28BS.determineNextBid();
+            if (group28BS.isEndNegotiation()) {
+                return new EndNegotiation(getPartyId());
+            }
+        }
+
+        if (bid == null) {
+            System.out.println("Error in code, null bid was given");
+            return new Accept(getPartyId(), oppBid);
+        } else {
+            group28BS.setNextBid(bid);
+        }
+
+        Actions decision = Actions.Reject;
+        if (!negotiationSession.getOpponentBidHistory().getHistory()
+                .isEmpty()) {
+            decision = group28AS.determineAcceptability();
+        }
+
+        if (decision.equals(Actions.Break)) {
+            System.out.println("send EndNegotiation");
+            return new EndNegotiation(getPartyId());
+        }
+
+        if (decision.equals(Actions.Reject)) {
+            negotiationSession.getOwnBidHistory().add(bid);
+            return new Offer(getPartyId(), bid.getBid());
+        } else {
+            return new Accept(getPartyId(), oppBid);
+        }
     }
 
     @Override
@@ -52,13 +131,9 @@ public class Group28_UParty extends AbstractNegotiationParty {
 
     public AbstractUtilitySpace estimateUtilitySpace() {
         Domain domain = getDomain();
-        CustomUtilitySpaceFactory factory = new CustomUtilitySpaceFactory(domain);
+        AdditiveUtilitySpaceFactory factory = new CustomUtilitySpaceFactory(domain);
         BidRanking bidRanking = userModel.getBidRanking();
         factory.estimateUsingBidRanks(bidRanking);
         return factory.getUtilitySpace();
-    }
-
-    private void log(String var1) {
-        System.out.println(var1);
     }
 }
