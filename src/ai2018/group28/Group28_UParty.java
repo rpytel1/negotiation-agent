@@ -6,6 +6,7 @@ import genius.core.actions.Accept;
 import genius.core.actions.Action;
 import genius.core.actions.Offer;
 import genius.core.parties.AbstractNegotiationParty;
+import genius.core.uncertainty.AdditiveUtilitySpaceFactory;
 import genius.core.uncertainty.BidRanking;
 import genius.core.uncertainty.ExperimentalUserModel;
 import genius.core.utility.AbstractUtilitySpace;

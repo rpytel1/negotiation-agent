@@ -98,7 +98,7 @@ public class CustomUtilitySpaceFactory extends AdditiveUtilitySpaceFactory {
             EvaluatorDiscrete evaluator = (EvaluatorDiscrete) u.getEvaluator(i);
             evaluator.scaleAllValuesFrom0To1();
         }
-        normalizeWeights();
+        u.normalizeWeights();
     }
 
     private HashMap<Issue, HashMap<ValueDiscrete, PopularityMeasure>> initPopularityMap(Domain domain) {
@@ -113,21 +113,6 @@ public class CustomUtilitySpaceFactory extends AdditiveUtilitySpaceFactory {
         }
 
         return inp;
-    }
-
-    private void normalizeWeights() {
-        Map<Issue, Long> maxWeightsForIssue = new HashMap<>();
-        List<Issue> issues = getIssues();
-        for (Issue i : issues) {
-            maxWeightsForIssue.put(i, popularityMap.get(i).values().stream().max(PopularityMeasure::compareTo).get().calculateWeight());
-        }
-        Long sumOfMaxes = maxWeightsForIssue.values().stream().mapToLong(Long::longValue).sum();
-        Map<Objective, Evaluator> evaluators = u.getfEvaluators();
-        for (Objective obj : evaluators.keySet()) {
-            double weight = maxWeightsForIssue.get(obj) / sumOfMaxes;
-            u.setWeight(obj, weight);
-        }
-
     }
 
     private List<Issue> getIssues() {
