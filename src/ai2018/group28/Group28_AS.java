@@ -15,8 +15,8 @@ import genius.core.boaframework.OpponentModel;
 /**
  * This Acceptance Condition will accept an opponent bid in the following cases:
  * if 99% of time has already passed
- * if the negotiation time is under 75% of the deadline time -> Group28_AC = AC_Const || AC_Next || AC_Prev
- * if the negotiation time is over 75% of the deadline time -> Group28_AC = AC_Combi_MaxW
+ * if the negotiation time is under 94% of the deadline time -> Group28_AC = AC_Const || AC_Next || AC_Prev
+ * if the negotiation time is over 94% of the deadline time -> Group28_AC = AC_Combi_MaxW
  */
 
 public class Group28_AS extends AcceptanceStrategy {
@@ -67,7 +67,7 @@ public class Group28_AS extends AcceptanceStrategy {
         if (negotiationSession.getTime() >= time_const){
             return Actions.Accept;
         }
-        else if (negotiationSession.getTime() <= 0.85){
+        else if (negotiationSession.getTime() <= 0.94){
             if (negotiationSession.getOpponentBidHistory() != null && negotiationSession.getOwnBidHistory().getLastBidDetails() != null){
                 double lastOpponentBidUtil = negotiationSession.getOpponentBidHistory().getLastBidDetails().getMyUndiscountedUtil();
                 double lastMyBidUtil = negotiationSession.getOwnBidHistory().getLastBidDetails().getMyUndiscountedUtil();

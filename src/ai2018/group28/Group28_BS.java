@@ -1,7 +1,6 @@
 package ai2018.group28;
 
 import java.util.*;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import genius.core.Bid;
@@ -29,12 +28,12 @@ public class Group28_BS extends OfferingStrategy {
     /**
      * The constant threshold value for the 1st phase
      */
-    double phase1Threshold = 0.9;
-    double tolerance = 0.03;
+    double phase1Threshold = 0.93;
+    double tolerance = 0.02;
     /**
      * End time parameter of phase 1
      */
-    double phase1EndTime = 0.3;
+    double phase1EndTime = 0.1;
     /**
      * Concession rate
      */
@@ -54,7 +53,7 @@ public class Group28_BS extends OfferingStrategy {
     /**
      * Parameter used in the third term of the time dependent threshold formula
      */
-    double extraStep = 0.05;
+    double extraStep = 0.07;
     /**
      * Outcome space
      */
@@ -79,13 +78,9 @@ public class Group28_BS extends OfferingStrategy {
 
         if (parameters.get("k") != null)
             this.k = parameters.get("k");
-        else
-            this.k = 0.05;
 
         if (parameters.get("extra") != null)
             this.extraStep = parameters.get("extra");
-        else
-            this.extraStep = 0.05;
 
         this.minUtil = negoSession.getMinBidinDomain().getMyUndiscountedUtil();
         this.opponentModel = model;
@@ -145,11 +140,12 @@ public class Group28_BS extends OfferingStrategy {
         ArrayList<BidDetailsExtended> bidDetailsExtended = new ArrayList<BidDetailsExtended>();
         for (int i = 0; i < phase2BidsNum; i++) {
             BidDetails randomBid = getRandomBid(currThreshold);
-            bidDetailsExtended.add(new BidDetailsExtended(randomBid, kalaiSmordinskyPoint, getBidPoint(randomBid)));
+            double oponnentUtility = opponentModel.getBidEvaluation(randomBid.getBid());
+            bidDetailsExtended.add(new BidDetailsExtended(randomBid, kalaiSmordinskyPoint, getBidPoint(randomBid), oponnentUtility));
         }
-        bidDetailsExtended.sort(Comparator.comparingDouble(BidDetailsExtended::getDistance));
+        bidDetailsExtended.sort(Comparator.comparingDouble(BidDetailsExtended::getMeasure));
 
-        List<BidDetails> bidDetails = bidDetailsExtended.stream().limit(40).map(p->p.getBidDetails()).collect(Collectors.toList());
+        List<BidDetails> bidDetails = bidDetailsExtended.stream().limit(30).map(p -> p.getBidDetails()).collect(Collectors.toList());
         return omStrategy.getBid(bidDetails);
     }
 
