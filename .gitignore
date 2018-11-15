@@ -156,3 +156,12 @@ fabric.properties
 .idea/
 .idea/vcs.xml
 
+/multipartyprotocolrepository.xml
+/boarepository.xml
+/boapartyrepo.xml
+/domainrepository.xml
+/protocolrepository.xml
+/partyrepository.xml
+DataObjects/
+etc/
+log/
