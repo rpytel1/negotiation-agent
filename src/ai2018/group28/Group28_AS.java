@@ -1,5 +1,3 @@
-package ai2018.group28;
-
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -63,24 +61,25 @@ public class Group28_AS extends AcceptanceStrategy {
     }
 
     @Override
-    public Actions determineAcceptability() {
+   public Actions determineAcceptability() {
         if (negotiationSession.getTime() >= time_const){
             return Actions.Accept;
         }
-        else if (negotiationSession.getTime() <= 0.94){
+    	else if (negotiationSession.getTime() <= 0.85){
             if (negotiationSession.getOpponentBidHistory() != null && negotiationSession.getOwnBidHistory().getLastBidDetails() != null){
                 double lastOpponentBidUtil = negotiationSession.getOpponentBidHistory().getLastBidDetails().getMyUndiscountedUtil();
                 double lastMyBidUtil = negotiationSession.getOwnBidHistory().getLastBidDetails().getMyUndiscountedUtil();
-                if (lastOpponentBidUtil * a >= lastMyBidUtil || lastOpponentBidUtil * a >= offeringStrategy.getNextBid().getMyUndiscountedUtil() || lastOpponentBidUtil * a >= acc_const) {
-                    return Actions.Accept;
+                if (lastOpponentBidUtil * a >= lastMyBidUtil || lastOpponentBidUtil * a >= offeringStrategy.getNextBid().getMyUndiscountedUtil() || lastOpponentBidUtil * a >= acc_const ) {
+                	return Actions.Accept;
                 }
             }
             return Actions.Reject;
         }
         else{
             // first if clause only for time reasons - to accept more quickly
-            if (negotiationSession.getOpponentBidHistory().getLastBidDetails().getMyUndiscountedUtil() >= offeringStrategy.getNextBid().getMyUndiscountedUtil())
-                return Actions.Accept;
+            if (negotiationSession.getOpponentBidHistory().getLastBidDetails().getMyUndiscountedUtil() >= offeringStrategy.getNextBid().getMyUndiscountedUtil() && negotiationSession.getOpponentBidHistory().getLastBidDetails().getMyUndiscountedUtil()>= 2.1*Math.exp(-negotiationSession.getTime())) {
+            	System.out.println(2.1*Math.exp(-negotiationSession.getTime()));
+            	return Actions.Accept;}
             double offeredUndiscountedUtility = negotiationSession.getOpponentBidHistory().getLastBidDetails().getMyUndiscountedUtil();
             double now = negotiationSession.getTime();
             double window = 1 - now;
@@ -88,7 +87,9 @@ public class Group28_AS extends AcceptanceStrategy {
             double max;
             if (recentBids.size() > 0) max = recentBids.getBestBidDetails().getMyUndiscountedUtil();
             else max = 0;
-            if (offeredUndiscountedUtility >= max) return Actions.Accept;
+            if (offeredUndiscountedUtility >= max && offeredUndiscountedUtility>= 2.1*Math.exp(-now)) {
+            	System.out.println(2.1*Math.exp(-now));
+            	return Actions.Accept;}
             return Actions.Reject;
         }
     }
