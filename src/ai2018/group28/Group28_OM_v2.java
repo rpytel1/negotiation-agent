@@ -53,7 +53,7 @@ public class Group28_OM_v2 extends OpponentModel{
 		}
 		learnValueAddition = 1;
 		beta = 0.9;
-		window = 10;
+		window = 5;
 		currNumOfWindows = 0;
 		opponentUtilitySpace = (AdditiveUtilitySpace) negotiationSession
 				.getUtilitySpace().copy();
@@ -100,7 +100,7 @@ public class Group28_OM_v2 extends OpponentModel{
 					Issue iss = (Issue) e.getKey();
 					p = SimilarityTest(iss);
 					System.out.println("Issue " + iss.getName() + " has p value of "+p);
-					if (p<0.05){
+					if (p<0.03){
 						unchanged.add(iss);
 						numberOfUnchanged++;
 					}
