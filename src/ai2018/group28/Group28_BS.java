@@ -1,6 +1,9 @@
 package ai2018.group28;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import genius.core.Bid;
@@ -145,10 +148,22 @@ public class Group28_BS extends OfferingStrategy {
         }
         bidDetailsExtended.sort(Comparator.comparingDouble(BidDetailsExtended::getMeasure));
 
-        List<BidDetails> bidDetails = bidDetailsExtended.stream().limit(30).map(p -> p.getBidDetails()).collect(Collectors.toList());
-        return omStrategy.getBid(bidDetails);
-    }
+        List<BidDetails> bidDetails = bidDetailsExtended.stream()
+                .map(p -> p.getBidDetails())
+                .filter(distinctByKey(p->p.getBid()))
+                .collect(Collectors.toList());
+        BidDetails bestPreviousBid = negotiationSession.getOpponentBidHistory().getBestBidDetails();
+        BidDetails omStrategyBid = omStrategy.getBid(bidDetails);
 
+        return bestPreviousBid.getMyUndiscountedUtil() > omStrategyBid.getMyUndiscountedUtil()
+                ? bestPreviousBid
+                : omStrategyBid;
+
+    }
+    public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+        Set<Object> seen = ConcurrentHashMap.newKeySet();
+        return t -> seen.add(keyExtractor.apply(t));
+    }
     /**
      * Method used to create random bids above the given threshold
      * If the 2nd phase has initiated then the created bids are in the
