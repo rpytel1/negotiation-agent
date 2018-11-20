@@ -83,7 +83,6 @@ public class Group28_OM_v2 extends OpponentModel{
 		BidDetails oppBid;
 		boolean concession = false;
 		if (negotiationSession.getOpponentBidHistory().size() >= window*(currNumOfWindows+1)) {
-			System.out.println("------------------------Updating---------------------------");
 			for (int i=0; i<window; i++){
 				oppBid = negotiationSession.getOpponentBidHistory()
 						.getHistory()
@@ -99,7 +98,6 @@ public class Group28_OM_v2 extends OpponentModel{
 					opponentUtilitySpace.unlock(e.getKey());
 					Issue iss = (Issue) e.getKey();
 					p = SimilarityTest(iss);
-					System.out.println("Issue " + iss.getName() + " has p value of "+p);
 					if (p<0.03){
 						unchanged.add(iss);
 						numberOfUnchanged++;
@@ -123,7 +121,6 @@ public class Group28_OM_v2 extends OpponentModel{
 							}
 							n++;
 						}
-						System.out.println("s1->"+s1+" s2->" + s2);
 						if (s1/n<s2/n) concession = true;
 					}
 				}
@@ -135,7 +132,6 @@ public class Group28_OM_v2 extends OpponentModel{
 						double weight = opponentUtilitySpace.getWeight(i);
 						double newWeight;
 						if (unchanged.contains(i)) {
-							System.out.println("Issue " + i.getName() + " updated");
 							newWeight = (weight + goldenValue) / totalSum;
 						} else {
 							newWeight = weight / totalSum;
@@ -193,7 +189,6 @@ public class Group28_OM_v2 extends OpponentModel{
 		double result = 0;
 		try {
 			result = opponentUtilitySpace.getUtility(bid);
-			System.out.println("Current bid has utility of "+ result);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -224,15 +219,12 @@ public class Group28_OM_v2 extends OpponentModel{
 
 			opponentUtilitySpace.unlock(e.getKey());
 			e.getValue().setWeight(commonWeight);
-			System.out.println("Issue " + e.getKey().getName() + 
-					" has initial weight of "+ e.getValue().getWeight());
 			try {
 				// set all value weights to one (they are normalized when
 				// calculating the utility)
 				for (ValueDiscrete vd : ((IssueDiscrete) e.getKey())
 						.getValues())
 					((EvaluatorDiscrete) e.getValue()).setEvaluation(vd, 1);
-				System.out.println(e.getValue().toString());
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
