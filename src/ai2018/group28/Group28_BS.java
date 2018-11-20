@@ -153,7 +153,8 @@ public class Group28_BS extends OfferingStrategy {
                 .filter(distinctByKey(p->p.getBid()))
                 .collect(Collectors.toList());
         BidDetails bestPreviousBid = negotiationSession.getOpponentBidHistory().getBestBidDetails();
-        BidDetails omStrategyBid = omStrategy.getBid(bidDetails);
+        System.out.println(bidDetails.size()+ ":"+(int)(bidDetails.size()*0.75));
+        BidDetails omStrategyBid = omStrategy.getBid(bidDetails.subList(0,(int)(bidDetails.size()*0.75)));
 
         return bestPreviousBid.getMyUndiscountedUtil() > omStrategyBid.getMyUndiscountedUtil()
                 ? bestPreviousBid
