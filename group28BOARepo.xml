@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<multilateralTournamentsConfiguration>
+	<tournaments>
+		<tournament>
+			<deadline>
+				<value>180</value>
+				<type>ROUND</type>
+			</deadline>
+			<protocolItem hasMediatorProfile="false" hasMediator="false"
+				description="Each agents makes offer, counter-offer, or accepts"
+				classPath="genius.core.protocol.StackedAlternatingOffersProtocol"
+				protocolName="Stacked Alternating Offers Protocol for Multi-Lateral Negotiation (SAOPMN)" />
+			<partyRepItems>
+				<party classPath="agents.anac.y2011.Gahboninho.Gahboninho">
+					<properties />
+				</party>
+				<party classPath="agents.anac.y2011.HardHeaded.KLH">
+					<properties />
+				</party>
+				<party classPath="agents.anac.y2011.TheNegotiator.TheNegotiator">
+					<properties />
+				</party>
+				<boaparty partyName="Group28Agent">
+					<properties/>
+					<biddingStrategy>
+			            <parameters name="threshold" value="0.9"/>
+			            <parameters name="k" value="0.05"/>
+			            <parameters name="extra" value="0.05"/>
+			            <parameters name="cnc" value="0.02"/>
+			            <item classpath="C:\Users\Vasilis\git\negotiation-agent\bin\ai2018\group28\Group28_BS.class"/>
+			        </biddingStrategy>
+			        <acceptanceStrategy>
+			            <parameters name="time" value="0.99"/>
+			            <parameters name="a" value="1.02"/>
+			            <parameters name="threshold" value="0.9"/>
+			            <item classpath="C:\Users\Vasilis\git\negotiation-agent\bin\ai2018\group28\Group28_AS.class"/>
+			        </acceptanceStrategy>
+			        <opponentModel>
+			            <parameters name="l" value="0.2"/>
+			            <item classpath="C:\Users\Vasilis\git\negotiation-agent\bin\ai2018\group28\Group28_OM_v2.class"/>
+			        </opponentModel>
+			        <omStrategy>
+			            <parameters name="t" value="1.1"/>
+			            <item classpath="C:\Users\Vasilis\git\negotiation-agent\bin\ai2018\group28\Group28_OMS.class"/>
+			        </omStrategy>
+			    </boaparty>
+			</partyRepItems>
+			<partyProfileItems>
+				<item url="file:etc/templates/partydomain/party1_utility.xml" />
+				<item url="file:etc/templates/partydomain/party2_utility.xml" />
+				<item url="file:etc/templates/partydomain/party3_utility.xml" />
+				<item url="file:etc/templates/partydomain/party4_utility.xml" />
+				<item url="file:etc/templates/partydomain/party5_utility.xml" />
+				<item url="file:etc/templates/partydomain/party6_utility.xml" />
+				<item url="file:etc/templates/partydomain/party7_utility.xml" />
+				<item url="file:etc/templates/partydomain/party8_utility.xml" />
+				<item url="file:etc/templates/partydomain/party9_utility.xml" />
+			</partyProfileItems>
+			<repeats>1</repeats>
+			<numberOfPartiesPerSession>2</numberOfPartiesPerSession>
+			<repetitionAllowed>false</repetitionAllowed>
+			<persistentDataType>DISABLED</persistentDataType>
+		</tournament>
+
+
+	</tournaments>
+</multilateralTournamentsConfiguration>

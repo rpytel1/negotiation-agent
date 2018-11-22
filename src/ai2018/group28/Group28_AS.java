@@ -1,16 +1,21 @@
 package ai2018.group28;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import genius.core.BidHistory;
+import genius.core.bidding.BidDetails;
 import genius.core.boaframework.AcceptanceStrategy;
 import genius.core.boaframework.Actions;
 import genius.core.boaframework.BOAparameter;
 import genius.core.boaframework.NegotiationSession;
 import genius.core.boaframework.OfferingStrategy;
 import genius.core.boaframework.OpponentModel;
+import genius.core.issue.Value;
 
 /**
  * This Acceptance Condition will accept an opponent bid in the following cases:
@@ -24,7 +29,7 @@ public class Group28_AS extends AcceptanceStrategy {
     private double a;
     private double acc_const;
     private double time_const;
-
+    double timeWindow = 0.2;
     /**
      * Empty constructor for the BOA framework.
      */
@@ -79,6 +84,7 @@ public class Group28_AS extends AcceptanceStrategy {
         }
         else{
             // first if clause only for time reasons - to accept more quickly
+        	if (!checkConceeding()) return Actions.Reject;
             if (negotiationSession.getOpponentBidHistory().getLastBidDetails().getMyUndiscountedUtil() >= offeringStrategy.getNextBid().getMyUndiscountedUtil() && negotiationSession.getOpponentBidHistory().getLastBidDetails().getMyUndiscountedUtil()>= 2.1*Math.exp(-negotiationSession.getTime())) {
             	System.out.println(2.1*Math.exp(-negotiationSession.getTime()));
             	return Actions.Accept;}
@@ -94,6 +100,31 @@ public class Group28_AS extends AcceptanceStrategy {
             	return Actions.Accept;}
             return Actions.Reject;
         }
+    }
+    
+    public boolean checkConceeding() {
+        List<Boolean> isConceedingList = new ArrayList<>();
+        double currTime = negotiationSession.getTime();
+        List<BidDetails> windowBids = negotiationSession.getOpponentBidHistory().filterBetweenTime(currTime - timeWindow, currTime).getHistory();
+
+        ///check between if it is conceding
+        for (int i = 0; i < windowBids.size() - 1; i++) {
+
+            double firstUtil = windowBids.get(i).getMyUndiscountedUtil();
+            double seccondUtil = windowBids.get(i + 1).getMyUndiscountedUtil();
+
+            Boolean conceeding = new Boolean(firstUtil < seccondUtil);
+            isConceedingList.add(conceeding);
+        }
+
+        //check if it conceeds in overall
+        double startWindowUtil = windowBids.get(0).getMyUndiscountedUtil();
+        double endWindowUtil = windowBids.get(windowBids.size() - 1).getMyUndiscountedUtil();
+
+        Boolean conceeding = new Boolean(startWindowUtil < endWindowUtil);
+        isConceedingList.add(conceeding);
+        long numOfConceeding = isConceedingList.stream().filter(p -> p.booleanValue() == true).count();
+        return numOfConceeding > windowBids.size() / 2;
     }
 
     @Override
