@@ -11,15 +11,62 @@
 				classPath="genius.core.protocol.StackedAlternatingOffersProtocol"
 				protocolName="Stacked Alternating Offers Protocol for Multi-Lateral Negotiation (SAOPMN)" />
 			<partyRepItems>
-				<party classPath="agents.anac.y2011.Gahboninho.Gahboninho">
-					<properties />
-				</party>
-				<party classPath="agents.anac.y2011.HardHeaded.KLH">
-					<properties />
-				</party>
-				<party classPath="agents.anac.y2011.TheNegotiator.TheNegotiator">
-					<properties />
-				</party>
+				<boaparty partyName="HardHeaded">
+					<properties/>
+					<biddingStrategy>
+					    <item classpath="negotiator.boaframework.offeringstrategy.anac2011.HardHeaded_Offering"/>
+					</biddingStrategy>
+					<acceptanceStrategy>
+					    <item classpath="negotiator.boaframework.acceptanceconditions.anac2011.AC_HardHeaded"/>
+					</acceptanceStrategy>
+					<opponentModel>
+					    <item classpath="negotiator.boaframework.opponentmodel.HardHeadedFrequencyModel"/>
+					</opponentModel>
+					<omStrategy>
+					    <item classpath="negotiator.boaframework.omstrategy.BestBid"/>
+					</omStrategy>
+				    </boaparty>
+				<boaparty partyName="OurHardHeaded">
+					<properties/>
+					<biddingStrategy>
+					    <item classpath="negotiator.boaframework.offeringstrategy.anac2011.HardHeaded_Offering"/>
+					</biddingStrategy>
+					<acceptanceStrategy>
+					    <item classpath="negotiator.boaframework.acceptanceconditions.anac2011.AC_HardHeaded"/>
+					</acceptanceStrategy>
+					<opponentModel>
+					    <parameters name="l" value="0.2"/>
+					    <parameters name="beta" value="0.5"/>
+			            <parameters name="w" value="5.0"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_OM_v2.class"/>
+					</opponentModel>
+					<omStrategy>
+					    <item classpath="negotiator.boaframework.omstrategy.BestBid"/>
+					</omStrategy>
+				    </boaparty>
+				<boaparty partyName="Group28AgentFrequencyModel">
+					<properties/>
+					<biddingStrategy>
+					    <parameters name="threshold" value="0.9"/>
+			            <parameters name="k" value="0.05"/>
+			            <parameters name="extra" value="0.05"/>
+			            <parameters name="cnc" value="0.02"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_BS.class"/>
+					</biddingStrategy>
+					<acceptanceStrategy>
+					    <parameters name="time" value="0.99"/>
+			            <parameters name="a" value="1.02"/>
+			            <parameters name="threshold" value="0.9"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_AS.class"/>
+					</acceptanceStrategy>
+					<opponentModel>
+					    <item classpath="negotiator.boaframework.opponentmodel.HardHeadedFrequencyModel"/>
+					</opponentModel>
+					<omStrategy>
+					    <parameters name="t" value="1.1"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_OMS.class"/>
+					</omStrategy>
+				</boaparty>
 				<boaparty partyName="Group28Agent">
 					<properties/>
 					<biddingStrategy>
