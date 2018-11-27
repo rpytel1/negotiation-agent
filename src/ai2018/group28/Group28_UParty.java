@@ -30,7 +30,7 @@ public class Group28_UParty extends AbstractNegotiationParty {
         group28_OMS = new Group28_OMS();
         group28AS = new Group28_AS();
         group28BS = new Group28_BS();
-        group28_OM = new Group28_OM();
+        group28_OM = new Group28_OM_v2();
     }
 
     @Override

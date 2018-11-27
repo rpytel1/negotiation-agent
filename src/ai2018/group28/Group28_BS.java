@@ -61,6 +61,14 @@ public class Group28_BS extends OfferingStrategy {
      * Outcome space
      */
     private SortedOutcomeSpace outcomespace;
+    /**
+     * discount factor of the domain
+     */
+    private double discountFactor = 0.0;
+    /**
+     * discount multiplier for threshold in phase 2 in discounted domain
+     */
+    private double discountMultiplier = 0.3;
 
     /**
      * Method which initializes the agent by setting all parameters. The
@@ -88,6 +96,9 @@ public class Group28_BS extends OfferingStrategy {
         this.minUtil = negoSession.getMinBidinDomain().getMyUndiscountedUtil();
         this.opponentModel = model;
         this.omStrategy = oms;
+        if (negotiationSession.getDiscountFactor() < 0.8) {
+            this.discountFactor = negotiationSession.getDiscountFactor();
+        }
     }
 
     @Override
@@ -127,6 +138,9 @@ public class Group28_BS extends OfferingStrategy {
     public BidDetails phase2CreateBid() {
         double currTime = this.negotiationSession.getTime();
         double currThreshold = minUtil + (1 - f(currTime)) * (phase1Threshold - minUtil) - extraStep * (currTime - phase1EndTime);
+        if (currTime > discountFactor) {
+            currThreshold += discountMultiplier * discountFactor * (currTime-discountFactor);
+        }
         BidPoint kalaiSmordinskyPoint = null;
         try {
             BidSpace bidSpace = new BidSpace(this.negotiationSession.getUtilitySpace(), this.opponentModel.getOpponentUtilitySpace(), false, true);
@@ -150,21 +164,23 @@ public class Group28_BS extends OfferingStrategy {
 
         List<BidDetails> bidDetails = bidDetailsExtended.stream()
                 .map(p -> p.getBidDetails())
-                .filter(distinctByKey(p->p.getBid()))
+                .filter(distinctByKey(p -> p.getBid()))
                 .collect(Collectors.toList());
         BidDetails bestPreviousBid = negotiationSession.getOpponentBidHistory().getBestBidDetails();
-        System.out.println(bidDetails.size()+ ":"+(int)(bidDetails.size()*0.75));
-        BidDetails omStrategyBid = omStrategy.getBid(bidDetails.subList(0,(int)(bidDetails.size()*0.75)));
+        System.out.println(bidDetails.size() + ":" + (int) (bidDetails.size() * 0.75));
+        BidDetails omStrategyBid = omStrategy.getBid(bidDetails.subList(0, (int) (Math.ceil(bidDetails.size() * 0.75))));
 
         return bestPreviousBid.getMyUndiscountedUtil() > omStrategyBid.getMyUndiscountedUtil()
                 ? bestPreviousBid
                 : omStrategyBid;
 
     }
+
     public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
         Set<Object> seen = ConcurrentHashMap.newKeySet();
         return t -> seen.add(keyExtractor.apply(t));
     }
+
     /**
      * Method used to create random bids above the given threshold
      * If the 2nd phase has initiated then the created bids are in the
@@ -206,7 +222,10 @@ public class Group28_BS extends OfferingStrategy {
     public double f(double t) {
         if (cncRate == 0)
             return k;
-        double ft = k + (1 - k) * Math.pow(t, 1.0 / cncRate);
+        if (t > discountFactor && discountFactor > 0) {
+            //cncRate = 2;
+        }
+         double ft = k + (1 - k) * Math.pow(t, 1.0 / cncRate);
         return ft;
     }
 
