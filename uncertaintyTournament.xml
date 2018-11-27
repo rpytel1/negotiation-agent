@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<multilateralTournamentsConfiguration>
+	<tournaments>
+		<tournament>
+			<deadline>
+				<value>180</value>
+				<type>ROUND</type>
+			</deadline>
+			<protocolItem hasMediatorProfile="false" hasMediator="false"
+				description="Each agents makes offer, counter-offer, or accepts"
+				classPath="genius.core.protocol.StackedAlternatingOffersProtocol"
+				protocolName="Stacked Alternating Offers Protocol for Multi-Lateral Negotiation (SAOPMN)" />
+			<partyRepItems>
+				<party classPath="negotiator.parties.BoulwareNegotiationParty">
+					<properties />
+				</party>
+				<party classPath=".\bin\ai2018\group28\Group28_UParty.class">
+					<properties />
+				</party>
+			</partyRepItems>
+			<partyProfileItems>
+				<item url="file:./party1_utility_uncertain.xml" />
+				<item url="file:./party2_utility_uncertain.xml" />
+			</partyProfileItems>
+			<repeats>1</repeats>
+			<numberOfPartiesPerSession>2</numberOfPartiesPerSession>
+			<repetitionAllowed>false</repetitionAllowed>
+			<persistentDataType>DISABLED</persistentDataType>
+		</tournament>
+
+
+	</tournaments>
+</multilateralTournamentsConfiguration>

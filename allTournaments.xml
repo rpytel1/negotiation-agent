@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<multilateralTournamentsConfiguration>
+	<tournaments>
+		<tournament> <!-- An uncertainty tournament example used in our tests -->
+			<deadline>
+				<value>180</value>
+				<type>ROUND</type>
+			</deadline>
+			<protocolItem hasMediatorProfile="false" hasMediator="false"
+				description="Each agents makes offer, counter-offer, or accepts"
+				classPath="genius.core.protocol.StackedAlternatingOffersProtocol"
+				protocolName="Stacked Alternating Offers Protocol for Multi-Lateral Negotiation (SAOPMN)" />
+			<partyRepItems>
+				<party classPath="negotiator.parties.BoulwareNegotiationParty">
+					<properties />
+				</party>
+				<party classPath=".\bin\ai2018\group28\Group28_UParty.class">
+					<properties />
+				</party>
+			</partyRepItems>
+			<partyProfileItems>
+				<item url="file:./party1_utility_uncertain.xml" /> <!-- The uncertainty profiles used in our tests -->
+				<item url="file:./party2_utility_uncertain.xml" /> <!-- The uncertainty parameters can be set in those xml files -->
+			</partyProfileItems>
+			<repeats>1</repeats>
+			<numberOfPartiesPerSession>2</numberOfPartiesPerSession>
+			<repetitionAllowed>false</repetitionAllowed>
+			<persistentDataType>DISABLED</persistentDataType>
+		</tournament>
+		<tournament> <!-- The tournament played by our agent against Gaboninho, HardHeaded and the Negotiator -->
+			<deadline>
+				<value>180</value>
+				<type>ROUND</type>
+			</deadline>
+			<protocolItem hasMediatorProfile="false" hasMediator="false"
+				description="Each agents makes offer, counter-offer, or accepts"
+				classPath="genius.core.protocol.StackedAlternatingOffersProtocol"
+				protocolName="Stacked Alternating Offers Protocol for Multi-Lateral Negotiation (SAOPMN)" />
+			<partyRepItems>
+				<party classPath="agents.anac.y2011.Gahboninho.Gahboninho">
+					<properties />
+				</party>
+				<party classPath="agents.anac.y2011.HardHeaded.KLH">
+					<properties />
+				</party>
+				<party classPath="agents.anac.y2011.TheNegotiator.TheNegotiator">
+					<properties />
+				</party>
+				<boaparty partyName="Group28Agent">
+					<properties/>
+					<biddingStrategy>
+			            <parameters name="threshold" value="0.9"/>
+			            <parameters name="k" value="0.05"/>
+			            <parameters name="extra" value="0.05"/>
+			            <parameters name="cnc" value="0.02"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_BS.class"/>
+			        </biddingStrategy>
+			        <acceptanceStrategy>
+			            <parameters name="time" value="0.99"/>
+			            <parameters name="a" value="1.02"/>
+			            <parameters name="threshold" value="0.9"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_AS.class"/>
+			        </acceptanceStrategy>
+			        <opponentModel>
+			            <parameters name="l" value="0.2"/>
+			            <parameters name="beta" value="0.5"/>
+			            <parameters name="w" value="5.0"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_OM.class"/>
+			        </opponentModel>
+			        <omStrategy>
+			            <parameters name="t" value="1.1"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_OMS.class"/>
+			        </omStrategy>
+			    </boaparty>
+			</partyRepItems>
+			<partyProfileItems>
+				<item url="file:etc/templates/partydomain/party1_utility.xml" />
+				<item url="file:etc/templates/partydomain/party2_utility.xml" />
+				<item url="file:etc/templates/partydomain/party3_utility.xml" />
+				<item url="file:etc/templates/partydomain/party4_utility.xml" />
+				<item url="file:etc/templates/partydomain/party5_utility.xml" />
+				<item url="file:etc/templates/partydomain/party6_utility.xml" />
+				<item url="file:etc/templates/partydomain/party7_utility.xml" />
+				<item url="file:etc/templates/partydomain/party8_utility.xml" />
+				<item url="file:etc/templates/partydomain/party9_utility.xml" />
+			</partyProfileItems>
+			<repeats>1</repeats>
+			<numberOfPartiesPerSession>2</numberOfPartiesPerSession>
+			<repetitionAllowed>false</repetitionAllowed>
+			<persistentDataType>DISABLED</persistentDataType>
+		</tournament>
+		<tournament> <!-- The tournament that our agent plays against itself -->
+			<deadline>
+				<value>180</value>
+				<type>ROUND</type>
+			</deadline>
+			<protocolItem hasMediatorProfile="false" hasMediator="false"
+				description="Each agents makes offer, counter-offer, or accepts"
+				classPath="genius.core.protocol.StackedAlternatingOffersProtocol"
+				protocolName="Stacked Alternating Offers Protocol for Multi-Lateral Negotiation (SAOPMN)" />
+			<partyRepItems>
+				<boaparty partyName="Group28Agent1">
+					<properties/>
+					<biddingStrategy>
+			            <parameters name="threshold" value="0.9"/>
+			            <parameters name="k" value="0.05"/>
+			            <parameters name="extra" value="0.05"/>
+			            <parameters name="cnc" value="0.02"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_BS.class"/>
+			        </biddingStrategy>
+			        <acceptanceStrategy>
+			            <parameters name="time" value="0.99"/>
+			            <parameters name="a" value="1.02"/>
+			            <parameters name="threshold" value="0.9"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_AS.class"/>
+			        </acceptanceStrategy>
+			        <opponentModel>
+			            <parameters name="l" value="0.2"/>
+			            <parameters name="beta" value="0.5"/>
+			            <parameters name="w" value="5.0"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_OM.class"/>
+			        </opponentModel>
+			        <omStrategy>
+			            <parameters name="t" value="1.1"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_OMS.class"/>
+			        </omStrategy>
+			    </boaparty>
+				<boaparty partyName="Group28Agent2">
+					<properties/>
+					<biddingStrategy>
+			            <parameters name="threshold" value="0.9"/>
+			            <parameters name="k" value="0.05"/>
+			            <parameters name="extra" value="0.05"/>
+			            <parameters name="cnc" value="0.02"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_BS.class"/>
+			        </biddingStrategy>
+			        <acceptanceStrategy>
+			            <parameters name="time" value="0.99"/>
+			            <parameters name="a" value="1.02"/>
+			            <parameters name="threshold" value="0.9"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_AS.class"/>
+			        </acceptanceStrategy>
+			        <opponentModel>
+			            <parameters name="l" value="0.2"/>
+			            <parameters name="beta" value="0.5"/>
+			            <parameters name="w" value="5.0"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_OM.class"/>
+			        </opponentModel>
+			        <omStrategy>
+			            <parameters name="t" value="1.1"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_OMS.class"/>
+			        </omStrategy>
+			    </boaparty>
+			</partyRepItems>
+			<partyProfileItems>
+				<item url="file:etc/templates/partydomain/party1_utility.xml" />
+				<item url="file:etc/templates/partydomain/party2_utility.xml" />
+				<item url="file:etc/templates/partydomain/party3_utility.xml" />
+				<item url="file:etc/templates/partydomain/party4_utility.xml" />
+				<item url="file:etc/templates/partydomain/party5_utility.xml" />
+				<item url="file:etc/templates/partydomain/party6_utility.xml" />
+				<item url="file:etc/templates/partydomain/party7_utility.xml" />
+				<item url="file:etc/templates/partydomain/party8_utility.xml" />
+				<item url="file:etc/templates/partydomain/party9_utility.xml" />
+			</partyProfileItems>
+			<repeats>1</repeats>
+			<numberOfPartiesPerSession>2</numberOfPartiesPerSession>
+			<repetitionAllowed>false</repetitionAllowed>
+			<persistentDataType>DISABLED</persistentDataType>
+		</tournament>
+		<tournament> <!-- The tournament created to compare our Opponent Model with the HardHeaded Frequency Model -->
+			<deadline>
+				<value>180</value>
+				<type>ROUND</type>
+			</deadline>
+			<protocolItem hasMediatorProfile="false" hasMediator="false"
+				description="Each agents makes offer, counter-offer, or accepts"
+				classPath="genius.core.protocol.StackedAlternatingOffersProtocol"
+				protocolName="Stacked Alternating Offers Protocol for Multi-Lateral Negotiation (SAOPMN)" />
+			<partyRepItems>
+				<boaparty partyName="HardHeaded">
+					<properties/>
+					<biddingStrategy>
+					    <item classpath="negotiator.boaframework.offeringstrategy.anac2011.HardHeaded_Offering"/>
+					</biddingStrategy>
+					<acceptanceStrategy>
+					    <item classpath="negotiator.boaframework.acceptanceconditions.anac2011.AC_HardHeaded"/>
+					</acceptanceStrategy>
+					<opponentModel>
+					    <item classpath="negotiator.boaframework.opponentmodel.HardHeadedFrequencyModel"/>
+					</opponentModel>
+					<omStrategy>
+					    <item classpath="negotiator.boaframework.omstrategy.BestBid"/>
+					</omStrategy>
+				    </boaparty>
+				<boaparty partyName="OurHardHeaded">
+					<properties/>
+					<biddingStrategy>
+					    <item classpath="negotiator.boaframework.offeringstrategy.anac2011.HardHeaded_Offering"/>
+					</biddingStrategy>
+					<acceptanceStrategy>
+					    <item classpath="negotiator.boaframework.acceptanceconditions.anac2011.AC_HardHeaded"/>
+					</acceptanceStrategy>
+					<opponentModel>
+					    <parameters name="l" value="0.2"/>
+					    <parameters name="beta" value="0.5"/>
+			            <parameters name="w" value="5.0"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_OM.class"/>
+					</opponentModel>
+					<omStrategy>
+					    <item classpath="negotiator.boaframework.omstrategy.BestBid"/>
+					</omStrategy>
+				    </boaparty>
+				<boaparty partyName="Group28AgentFrequencyModel">
+					<properties/>
+					<biddingStrategy>
+					    <parameters name="threshold" value="0.9"/>
+			            <parameters name="k" value="0.05"/>
+			            <parameters name="extra" value="0.05"/>
+			            <parameters name="cnc" value="0.02"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_BS.class"/>
+					</biddingStrategy>
+					<acceptanceStrategy>
+					    <parameters name="time" value="0.99"/>
+			            <parameters name="a" value="1.02"/>
+			            <parameters name="threshold" value="0.9"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_AS.class"/>
+					</acceptanceStrategy>
+					<opponentModel>
+					    <item classpath="negotiator.boaframework.opponentmodel.HardHeadedFrequencyModel"/>
+					</opponentModel>
+					<omStrategy>
+					    <parameters name="t" value="1.1"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_OMS.class"/>
+					</omStrategy>
+				</boaparty>
+				<boaparty partyName="Group28Agent">
+					<properties/>
+					<biddingStrategy>
+			            <parameters name="threshold" value="0.9"/>
+			            <parameters name="k" value="0.05"/>
+			            <parameters name="extra" value="0.05"/>
+			            <parameters name="cnc" value="0.02"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_BS.class"/>
+			        </biddingStrategy>
+			        <acceptanceStrategy>
+			            <parameters name="time" value="0.99"/>
+			            <parameters name="a" value="1.02"/>
+			            <parameters name="threshold" value="0.9"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_AS.class"/>
+			        </acceptanceStrategy>
+			        <opponentModel>
+			            <parameters name="l" value="0.2"/>
+			            <parameters name="beta" value="0.5"/>
+			            <parameters name="w" value="5.0"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_OM.class"/>
+			        </opponentModel>
+			        <omStrategy>
+			            <parameters name="t" value="1.1"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_OMS.class"/>
+			        </omStrategy>
+			    </boaparty>
+			</partyRepItems>
+			<partyProfileItems>
+				<item url="file:etc/templates/partydomain/party1_utility.xml" />
+				<item url="file:etc/templates/partydomain/party2_utility.xml" />
+				<item url="file:etc/templates/partydomain/party3_utility.xml" />
+				<item url="file:etc/templates/partydomain/party4_utility.xml" />
+				<item url="file:etc/templates/partydomain/party5_utility.xml" />
+				<item url="file:etc/templates/partydomain/party6_utility.xml" />
+				<item url="file:etc/templates/partydomain/party7_utility.xml" />
+				<item url="file:etc/templates/partydomain/party8_utility.xml" />
+				<item url="file:etc/templates/partydomain/party9_utility.xml" />
+			</partyProfileItems>
+			<repeats>1</repeats>
+			<numberOfPartiesPerSession>2</numberOfPartiesPerSession>
+			<repetitionAllowed>false</repetitionAllowed>
+			<persistentDataType>DISABLED</persistentDataType>
+		</tournament>
+		<!-- The tournaments in the discounted domains of Laptop, Grocery, ADG -->
+		<tournament> 
+			<deadline>
+				<value>180</value>
+				<type>ROUND</type>
+			</deadline>
+			<protocolItem hasMediatorProfile="false" hasMediator="false"
+				description="Each agents makes offer, counter-offer, or accepts"
+				classPath="genius.core.protocol.StackedAlternatingOffersProtocol"
+				protocolName="Stacked Alternating Offers Protocol for Multi-Lateral Negotiation (SAOPMN)" />
+			<partyRepItems>
+				<party classPath="agents.anac.y2011.Gahboninho.Gahboninho">
+					<properties />
+				</party>
+				<party classPath="agents.anac.y2011.HardHeaded.KLH">
+					<properties />
+				</party>
+				<party classPath="agents.anac.y2011.TheNegotiator.TheNegotiator">
+					<properties />
+				</party>
+				<boaparty partyName="Group28Agent">
+					<properties/>
+					<biddingStrategy>
+			            <parameters name="threshold" value="0.9"/>
+			            <parameters name="k" value="0.05"/>
+			            <parameters name="extra" value="0.05"/>
+			            <parameters name="cnc" value="0.02"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_BS.class"/>
+			        </biddingStrategy>
+			        <acceptanceStrategy>
+			            <parameters name="time" value="0.99"/>
+			            <parameters name="a" value="1.02"/>
+			            <parameters name="threshold" value="0.9"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_AS.class"/>
+			        </acceptanceStrategy>
+			        <opponentModel>
+			            <parameters name="l" value="0.2"/>
+			            <parameters name="beta" value="0.5"/>
+			            <parameters name="w" value="5.0"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_OM.class"/>
+			        </opponentModel>
+			        <omStrategy>
+			            <parameters name="t" value="1.1"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_OMS.class"/>
+			        </omStrategy>
+			    </boaparty>
+			</partyRepItems>
+			<partyProfileItems>
+				<item url="file:etc/templates/anac/y2011/Laptop/laptop_buyer_utility.xml" />
+				<item url="file:etc/templates/anac/y2011/Laptop/laptop_seller_utility.xml" />
+			</partyProfileItems>
+			<repeats>1</repeats>
+			<numberOfPartiesPerSession>2</numberOfPartiesPerSession>
+			<repetitionAllowed>false</repetitionAllowed>
+			<persistentDataType>DISABLED</persistentDataType>
+		</tournament>
+		<tournament>
+			<deadline>
+				<value>180</value>
+				<type>ROUND</type>
+			</deadline>
+			<protocolItem hasMediatorProfile="false" hasMediator="false"
+				description="Each agents makes offer, counter-offer, or accepts"
+				classPath="genius.core.protocol.StackedAlternatingOffersProtocol"
+				protocolName="Stacked Alternating Offers Protocol for Multi-Lateral Negotiation (SAOPMN)" />
+			<partyRepItems>
+				<party classPath="agents.anac.y2011.Gahboninho.Gahboninho">
+					<properties />
+				</party>
+				<party classPath="agents.anac.y2011.HardHeaded.KLH">
+					<properties />
+				</party>
+				<party classPath="agents.anac.y2011.TheNegotiator.TheNegotiator">
+					<properties />
+				</party>
+				<boaparty partyName="Group28Agent">
+					<properties/>
+					<biddingStrategy>
+			            <parameters name="threshold" value="0.9"/>
+			            <parameters name="k" value="0.05"/>
+			            <parameters name="extra" value="0.05"/>
+			            <parameters name="cnc" value="0.02"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_BS.class"/>
+			        </biddingStrategy>
+			        <acceptanceStrategy>
+			            <parameters name="time" value="0.99"/>
+			            <parameters name="a" value="1.02"/>
+			            <parameters name="threshold" value="0.9"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_AS.class"/>
+			        </acceptanceStrategy>
+			        <opponentModel>
+			            <parameters name="l" value="0.2"/>
+			            <parameters name="beta" value="0.5"/>
+			            <parameters name="w" value="5.0"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_OM.class"/>
+			        </opponentModel>
+			        <omStrategy>
+			            <parameters name="t" value="1.1"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_OMS.class"/>
+			        </omStrategy>
+			    </boaparty>
+			</partyRepItems>
+			<partyProfileItems>
+				<item url="file:etc/templates/anac/y2011/Car/adg_deal.xml" />
+				<item url="file:etc/templates/anac/y2011/Car/adg_deal2.xml" />
+			</partyProfileItems>
+			<repeats>1</repeats>
+			<numberOfPartiesPerSession>2</numberOfPartiesPerSession>
+			<repetitionAllowed>false</repetitionAllowed>
+			<persistentDataType>DISABLED</persistentDataType>
+		</tournament>
+		<tournament>
+			<deadline>
+				<value>180</value>
+				<type>ROUND</type>
+			</deadline>
+			<protocolItem hasMediatorProfile="false" hasMediator="false"
+				description="Each agents makes offer, counter-offer, or accepts"
+				classPath="genius.core.protocol.StackedAlternatingOffersProtocol"
+				protocolName="Stacked Alternating Offers Protocol for Multi-Lateral Negotiation (SAOPMN)" />
+			<partyRepItems>
+				<party classPath="agents.anac.y2011.Gahboninho.Gahboninho">
+					<properties />
+				</party>
+				<party classPath="agents.anac.y2011.HardHeaded.KLH">
+					<properties />
+				</party>
+				<party classPath="agents.anac.y2011.TheNegotiator.TheNegotiator">
+					<properties />
+				</party>
+				<boaparty partyName="Group28Agent">
+					<properties/>
+					<biddingStrategy>
+			            <parameters name="threshold" value="0.9"/>
+			            <parameters name="k" value="0.05"/>
+			            <parameters name="extra" value="0.05"/>
+			            <parameters name="cnc" value="0.02"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_BS.class"/>
+			        </biddingStrategy>
+			        <acceptanceStrategy>
+			            <parameters name="time" value="0.99"/>
+			            <parameters name="a" value="1.02"/>
+			            <parameters name="threshold" value="0.9"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_AS.class"/>
+			        </acceptanceStrategy>
+			        <opponentModel>
+			            <parameters name="l" value="0.2"/>
+			            <parameters name="beta" value="0.5"/>
+			            <parameters name="w" value="5.0"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_OM.class"/>
+			        </opponentModel>
+			        <omStrategy>
+			            <parameters name="t" value="1.1"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_OMS.class"/>
+			        </omStrategy>
+			    </boaparty>
+			</partyRepItems>
+			<partyProfileItems>
+				<item url="file:etc/templates/anac/y2012/Grocery/Grocery-A-prof1.xml" />
+				<item url="file:etc/templates/anac/y2012/Grocery/Grocery-A-prof2.xml" />
+			</partyProfileItems>
+			<repeats>1</repeats>
+			<numberOfPartiesPerSession>2</numberOfPartiesPerSession>
+			<repetitionAllowed>false</repetitionAllowed>
+			<persistentDataType>DISABLED</persistentDataType>
+		</tournament>
+
+	</tournaments>
+</multilateralTournamentsConfiguration>

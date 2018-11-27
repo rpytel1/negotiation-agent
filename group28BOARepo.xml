@@ -27,21 +27,23 @@
 			            <parameters name="k" value="0.05"/>
 			            <parameters name="extra" value="0.05"/>
 			            <parameters name="cnc" value="0.02"/>
-			            <item classpath="C:\Users\Vasilis\git\negotiation-agent\bin\ai2018\group28\Group28_BS.class"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_BS.class"/>
 			        </biddingStrategy>
 			        <acceptanceStrategy>
 			            <parameters name="time" value="0.99"/>
 			            <parameters name="a" value="1.02"/>
 			            <parameters name="threshold" value="0.9"/>
-			            <item classpath="C:\Users\Vasilis\git\negotiation-agent\bin\ai2018\group28\Group28_AS.class"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_AS.class"/>
 			        </acceptanceStrategy>
 			        <opponentModel>
 			            <parameters name="l" value="0.2"/>
-			            <item classpath="C:\Users\Vasilis\git\negotiation-agent\bin\ai2018\group28\Group28_OM_v2.class"/>
+			            <parameters name="beta" value="0.5"/>
+			            <parameters name="w" value="5.0"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_OM_v2.class"/>
 			        </opponentModel>
 			        <omStrategy>
 			            <parameters name="t" value="1.1"/>
-			            <item classpath="C:\Users\Vasilis\git\negotiation-agent\bin\ai2018\group28\Group28_OMS.class"/>
+			            <item classpath=".\bin\ai2018\group28\Group28_OMS.class"/>
 			        </omStrategy>
 			    </boaparty>
 			</partyRepItems>
