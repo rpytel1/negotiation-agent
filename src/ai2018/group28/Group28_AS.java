@@ -84,7 +84,7 @@ public class Group28_AS extends AcceptanceStrategy {
         }
         else{
             // first if clause only for time reasons - to accept more quickly
-        	if (!checkConceeding()) return Actions.Reject;
+        	if (!checkConceding()) return Actions.Reject;
             if (negotiationSession.getOpponentBidHistory().getLastBidDetails().getMyUndiscountedUtil() >= offeringStrategy.getNextBid().getMyUndiscountedUtil() && negotiationSession.getOpponentBidHistory().getLastBidDetails().getMyUndiscountedUtil()>= 2.1*Math.exp(-negotiationSession.getTime())) {
             	System.out.println(2.1*Math.exp(-negotiationSession.getTime()));
             	return Actions.Accept;}
@@ -102,7 +102,7 @@ public class Group28_AS extends AcceptanceStrategy {
         }
     }
     
-    public boolean checkConceeding() {
+    public boolean checkConceding() {
         List<Boolean> isConceedingList = new ArrayList<>();
         double currTime = negotiationSession.getTime();
         List<BidDetails> windowBids = negotiationSession.getOpponentBidHistory().filterBetweenTime(currTime - timeWindow, currTime).getHistory();
@@ -117,7 +117,7 @@ public class Group28_AS extends AcceptanceStrategy {
             isConceedingList.add(conceeding);
         }
 
-        //check if it conceeds in overall
+        //check if it concedes in overall
         double startWindowUtil = windowBids.get(0).getMyUndiscountedUtil();
         double endWindowUtil = windowBids.get(windowBids.size() - 1).getMyUndiscountedUtil();
 

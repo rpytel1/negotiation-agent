@@ -30,9 +30,9 @@ public class Group28_OMS extends OMStrategy {
             return bidsInRange.get(0);
         }
 
-        boolean isConciding = checkConceeding();
+        boolean isConceding = checkConceding();
 
-        if (isConciding) {
+        if (isConceding) {
             bestBid = selfishMove(bidsInRange);
         } else {
             bestBid = encouragingMove(bidsInRange);
@@ -113,34 +113,34 @@ public class Group28_OMS extends OMStrategy {
 
     /**
      * Method checking if agent is conceding or not.
-     * It calculates how many conceeding moves agent did in certain time window, comparing one move and the following one.
-     * At the end igt also compares if agent is conceding comparing first move of the window and the last.
+     * It calculates how many conceding moves agent did in certain time window, comparing one move and the following one.
+     * At the end it also compares if agent is conceding comparing first move of the window and the last.
      * If the value is greater than half of the moves we say that agent is conceding.
      *
-     * @return if agent is conceeding
+     * @return if agent is conceding
      */
-    public boolean checkConceeding() {
-        List<Boolean> isConceedingList = new ArrayList<>();
+    public boolean checkConceding() {
+        List<Boolean> isConcedingList = new ArrayList<>();
         double currTime = negotiationSession.getTime();
         List<BidDetails> windowBids = negotiationSession.getOpponentBidHistory().filterBetweenTime(currTime - timeWindow, currTime).getHistory();
 
-        ///check between if it is conceeding
+        ///check between if it is conceding
         for (int i = 0; i < windowBids.size() - 1; i++) {
             double firstUtil = model.getBidEvaluation(windowBids.get(i).getBid());
             double seccondUtil = model.getBidEvaluation(windowBids.get(i + 1).getBid());
 
-            Boolean conceeding = new Boolean(firstUtil < seccondUtil);
-            isConceedingList.add(conceeding);
+            Boolean Conceding = new Boolean(firstUtil > seccondUtil);
+            isConcedingList.add(Conceding);
         }
 
-        //check if it conceeds in overall
+        //check if it concedes in overall
         double startWindowUtil = model.getBidEvaluation(windowBids.get(0).getBid());
         double endWindowUtil = model.getBidEvaluation(windowBids.get(windowBids.size() - 1).getBid());
 
-        Boolean conceeding = new Boolean(startWindowUtil < endWindowUtil);
-        isConceedingList.add(conceeding);
-        long numOfConceeding = isConceedingList.stream().filter(p -> p.booleanValue() == true).count();
-        return numOfConceeding > windowBids.size() / 2;
+        Boolean Conceding = new Boolean(startWindowUtil > endWindowUtil);
+        isConcedingList.add(Conceding);
+        long numOfConceding = isConcedingList.stream().filter(p -> p.booleanValue() == true).count();
+        return numOfConceding > windowBids.size() / 2;
     }
 
     /** Method chooses random bid from
