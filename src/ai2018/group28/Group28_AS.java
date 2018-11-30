@@ -103,7 +103,7 @@ public class Group28_AS extends AcceptanceStrategy {
     }
     
     public boolean checkConceding() {
-        List<Boolean> isConceedingList = new ArrayList<>();
+        List<Boolean> isConcedingList = new ArrayList<>();
         double currTime = negotiationSession.getTime();
         List<BidDetails> windowBids = negotiationSession.getOpponentBidHistory().filterBetweenTime(currTime - timeWindow, currTime).getHistory();
 
@@ -113,18 +113,18 @@ public class Group28_AS extends AcceptanceStrategy {
             double firstUtil = windowBids.get(i).getMyUndiscountedUtil();
             double seccondUtil = windowBids.get(i + 1).getMyUndiscountedUtil();
 
-            Boolean conceeding = new Boolean(firstUtil < seccondUtil);
-            isConceedingList.add(conceeding);
+            Boolean conceding = new Boolean(firstUtil < seccondUtil);
+            isConcedingList.add(conceding);
         }
 
         //check if it concedes in overall
         double startWindowUtil = windowBids.get(0).getMyUndiscountedUtil();
         double endWindowUtil = windowBids.get(windowBids.size() - 1).getMyUndiscountedUtil();
 
-        Boolean conceeding = new Boolean(startWindowUtil < endWindowUtil);
-        isConceedingList.add(conceeding);
-        long numOfConceeding = isConceedingList.stream().filter(p -> p.booleanValue() == true).count();
-        return numOfConceeding > windowBids.size() / 2;
+        Boolean conceding = new Boolean(startWindowUtil < endWindowUtil);
+        isConcedingList.add(conceding);
+        long numOfConceding = isConcedingList.stream().filter(p -> p.booleanValue() == true).count();
+        return numOfConceding > windowBids.size() / 2;
     }
 
     @Override

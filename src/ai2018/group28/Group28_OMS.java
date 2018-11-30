@@ -51,7 +51,7 @@ public class Group28_OMS extends OMStrategy {
     }
 
     /**
-     * This method chooses bid which is the most in our favour(highest utility for our agent)
+     * This method chooses bid which is the most in our favor(highest utility for our agent)
      * if evaluations somehow fails choose random bid
      * @param bidsInRange
      * @return
@@ -81,7 +81,7 @@ public class Group28_OMS extends OMStrategy {
     }
 
     /**
-     * Method choosing bid which is the most in opponent favour
+     * Method choosing bid which is the most in opponent favor
      *  if evaluations somehow fails choose random bid
      * @param bidsInRange
      * @return
