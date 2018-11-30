@@ -16,8 +16,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The aim of this class was to introduce our own ideas in creating UtilitySpace in uncertain environment.
+ */
 public class CustomUtilitySpaceFactory extends AdditiveUtilitySpaceFactory {
-
+    /**
+     * UtilitySpace created by the the factory.
+     */
     private AdditiveUtilitySpace u;
     private Map<Issue, HashMap<ValueDiscrete, PopularityMeasure>> popularityMap;
 
@@ -47,6 +52,13 @@ public class CustomUtilitySpaceFactory extends AdditiveUtilitySpaceFactory {
 
     }
 
+    /**
+     * This method is estimating values of each issue based on the BidRanking provided.
+     * This method works as follows it iterates over all bids in their order, over each issue and then it was storing
+     * points for each value (number of points added is increasing while getting to the end) and as well number of occurrences
+     * For each occurance of certain value evaluator is updated by adding product of aggregated points and number of appearences
+     * @param r
+     */
     @Override
     public void estimateUsingBidRanks(BidRanking r) {
         int points = 0;
@@ -77,6 +89,12 @@ public class CustomUtilitySpaceFactory extends AdditiveUtilitySpaceFactory {
         normalizeWeightsByMaxValues();
     }
 
+    /**
+     * Helper method to update evaluator of certain issue for certain value
+     * @param i
+     * @param v
+     * @param val
+     */
     @Override
     public void setUtility(Issue i, ValueDiscrete v, double val) {
         EvaluatorDiscrete evaluator = (EvaluatorDiscrete) u.getEvaluator(i);
@@ -88,6 +106,9 @@ public class CustomUtilitySpaceFactory extends AdditiveUtilitySpaceFactory {
 
     }
 
+    /**
+     * Method to normalize evaluators of the values by maximal value for certain issue
+     */
     @Override
     public void normalizeWeightsByMaxValues() {
         for (Issue i : getIssues()) {
@@ -101,6 +122,11 @@ public class CustomUtilitySpaceFactory extends AdditiveUtilitySpaceFactory {
         u.normalizeWeights();
     }
 
+    /**
+     * Helper method to create Popularity Map for all issues and their values
+     * @param domain
+     * @return
+     */
     private HashMap<Issue, HashMap<ValueDiscrete, PopularityMeasure>> initPopularityMap(Domain domain) {
         HashMap<Issue, HashMap<ValueDiscrete, PopularityMeasure>> inp = new HashMap<>();
 

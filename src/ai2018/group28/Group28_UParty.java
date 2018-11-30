@@ -16,12 +16,30 @@ import genius.core.utility.AbstractUtilitySpace;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * The aim of this class is to have agent which manages uncertainty in his own way and consists of components we created.
+ * These class was based on class BOAParty code
+ */
 public class Group28_UParty extends AbstractNegotiationParty {
+    /**
+     * Our Acceptance strategy
+     */
     AcceptanceStrategy group28AS;
+    /**
+     * Our Bidding Strategy
+     */
     OfferingStrategy group28BS;
+    /**
+     * Our Oponnent Model
+     */
     OpponentModel group28_OM;
+    /**
+     * Our Opponent Model Strategy
+     */
     OMStrategy group28_OMS;
-
+    /**
+     * negotiation session object used in different methods
+     */
     NegotiationSession negotiationSession;
     Bid oppBid;
 
@@ -50,6 +68,9 @@ public class Group28_UParty extends AbstractNegotiationParty {
         initStrategies();
     }
 
+    /**
+     * Method initalizing all our strategies
+     */
     private void initStrategies() {
         try {
             group28_OM.init(negotiationSession, new HashMap<String, Double>());
@@ -61,6 +82,12 @@ public class Group28_UParty extends AbstractNegotiationParty {
         }
     }
 
+    /**
+     * This method is copy-paste of BOAPArty method with slight changes to use our strategies
+     * @param sender
+     * @param opponentAction
+     * @return
+     */
     @Override
     public void receiveMessage(AgentID sender, Action opponentAction) {
         if (opponentAction instanceof Offer) {
@@ -85,6 +112,11 @@ public class Group28_UParty extends AbstractNegotiationParty {
         }
     }
 
+    /**
+     * This method is copy-paste of BOAPArty method with slight changes to use our strategies
+     * @param possibleActions
+     * @return
+     */
     @Override
     public Action chooseAction(List<Class<? extends Action>> possibleActions) {
         BidDetails bid;
@@ -129,6 +161,14 @@ public class Group28_UParty extends AbstractNegotiationParty {
         return "Group 28 Uncertainty Agent";
     }
 
+    /**
+     * Our own estimaton of Utility Space for uncertain environment
+     * The algorithm works really similary as in AbstractNegotiationPart but instead of using
+     * AdditiveUtilitySpaceFactory it uses our own version of the class which can be found in file
+     * CustomUtiiltySpaceFactory. A lot in this class was drawn from AdditiveUtilitySpaceFactory,
+     * but some of our own ideas were introduced
+     * @return
+     */
     public AbstractUtilitySpace estimateUtilitySpace() {
         Domain domain = getDomain();
         AdditiveUtilitySpaceFactory factory = new CustomUtilitySpaceFactory(domain);
