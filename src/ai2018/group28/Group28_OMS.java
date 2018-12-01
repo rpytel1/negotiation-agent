@@ -11,27 +11,31 @@ public class Group28_OMS extends OMStrategy {
     double timeWindow = 0.2;
 
     /**
-     * Method evaluating list of bids and choosing the best one in certain situation.
-     * Algorithm works as follows:
-     * 1. check if opponent is conceding
-     * 2a. if so then choose best bid for you
-     * 2b. else choose best bid for opponent to encourage him to later offer us better bid for us
+     * This method evaluates a list of bids and chooses the best one in certain situation.
+     * The algorithm works as follows:
+     * 1. Check if opponent is conceding.
+     * 2a. If so then choose the best bid for you.
+     * 2b. Else, choose the best bid for the opponent, by using the opponent model, 
+     *     to encourage it to offer us later a better bid for us
      *
-     * @param bidsInRange
-     * @return
+     * @param bidsInRange , the list of bid that are considered for offering
+     * @return the bid we select from the given ones
      */
 
     @Override
     public BidDetails getBid(List<BidDetails> bidsInRange) {
 
         BidDetails bestBid;
-
+        
+        //If the given list of bids has only one bid, the choose this one
         if (bidsInRange.size() == 1) {
             return bidsInRange.get(0);
         }
 
+        //Check if the opponent is conceding
         boolean isConceding = checkConceding();
 
+        //Decide which is the best bid according to value of isConceding boolean
         if (isConceding) {
             bestBid = selfishMove(bidsInRange);
         } else {
@@ -51,29 +55,31 @@ public class Group28_OMS extends OMStrategy {
     }
 
     /**
-     * This method chooses bid which is the most in our favor(highest utility for our agent)
-     * if evaluations somehow fails choose random bid
-     * @param bidsInRange
-     * @return
+     * This method is used when the opponent is conceding.
+     * It chooses the bid which is the most in our favor(highest utility for our agent).
+     * If evaluations somehow fail, we choose a random bid among the given ones.
+     * @param bidsInRange , the list of bid that are considered for offering
+     * @return the bid we select from the given ones  
      */
     public BidDetails selfishMove(List<BidDetails> bidsInRange) {
+
         double bestUtil = -1;
         BidDetails bestBid = bidsInRange.get(0);
         boolean allWereZero = false;
 
         for (BidDetails bid : bidsInRange) {
+        	// Get the evaluation of the bid for our agent
             double evaluation = bid.getMyUndiscountedUtil();
 
             if (evaluation > 0.0001) {
                 allWereZero = false;
             }
-
+            // Find the one with highest utility
             if (evaluation > bestUtil) {
                 bestBid = bid;
                 bestUtil = evaluation;
             }
         }
-
         if (allWereZero) {
             return chooseRandom(bidsInRange);
         }
@@ -81,10 +87,12 @@ public class Group28_OMS extends OMStrategy {
     }
 
     /**
-     * Method choosing bid which is the most in opponent favor
-     *  if evaluations somehow fails choose random bid
-     * @param bidsInRange
-     * @return
+     * This method is used when the opponent is not concedeing.
+     * It chooses the  bid which is the most in opponent favor, by estimating 
+     * its utility for the opponent by using the Opponent Model Strategy.
+     * If evaluations somehow fail, we choose a random bid among the given ones
+     * @param bidsInRange , the list of bid that are considered for offering
+     * @return the bid we select from the given ones  
      */
     public BidDetails encouragingMove(List<BidDetails> bidsInRange) {
 
@@ -93,12 +101,13 @@ public class Group28_OMS extends OMStrategy {
         boolean allWereZero = true;
 
         for (BidDetails bid : bidsInRange) {
+        	// Get the evaluation of the bid for the opponent by using the OM
             double evaluation = model.getBidEvaluation(bid.getBid());
 
             if (evaluation > 0.0001) {
                 allWereZero = false;
             }
-
+            // Find the one with highest utility
             if (evaluation > bestUtil) {
                 bestBid = bid;
                 bestUtil = evaluation;
@@ -112,10 +121,13 @@ public class Group28_OMS extends OMStrategy {
     }
 
     /**
-     * Method checking if agent is conceding or not.
-     * It calculates how many conceding moves agent did in certain time window, comparing one move and the following one.
-     * At the end it also compares if agent is conceding comparing first move of the window and the last.
-     * If the value is greater than half of the moves we say that agent is conceding.
+     * This method checks if the opponent is conceding or not.
+     * It calculates how many conceding moves agent it did in certain time window,
+     * comparing every move with the following one.
+     * At the end, it also check if the opponent is conceding by comparing the first
+     * move of the window with the last one.
+     * If the number of conceding moves is greater than the half of the moves of the
+     * window, we conclude that the opponent is conceding.
      *
      * @return if agent is conceding
      */
@@ -124,7 +136,7 @@ public class Group28_OMS extends OMStrategy {
         double currTime = negotiationSession.getTime();
         List<BidDetails> windowBids = negotiationSession.getOpponentBidHistory().filterBetweenTime(currTime - timeWindow, currTime).getHistory();
 
-        ///check between if it is conceding
+        // Find the number of conceding moves within the window
         for (int i = 0; i < windowBids.size() - 1; i++) {
             double firstUtil = model.getBidEvaluation(windowBids.get(i).getBid());
             double seccondUtil = model.getBidEvaluation(windowBids.get(i + 1).getBid());
@@ -133,10 +145,11 @@ public class Group28_OMS extends OMStrategy {
             isConcedingList.add(Conceding);
         }
 
-        //check if it concedes in overall
+        //Compare the utility of its last move with the one of the first
         double startWindowUtil = model.getBidEvaluation(windowBids.get(0).getBid());
         double endWindowUtil = model.getBidEvaluation(windowBids.get(windowBids.size() - 1).getBid());
 
+        //Check if it concedes in overall
         Boolean Conceding = new Boolean(startWindowUtil > endWindowUtil);
         isConcedingList.add(Conceding);
         long numOfConceding = isConcedingList.stream().filter(p -> p.booleanValue() == true).count();
